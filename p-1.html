@@ -1,41 +1,65 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
-  <title>Hello, World!</title>
   <style>
-.myvideo {
-  width: 500px;
-  height: 700px;
-  object-fit: cover;
-}
-</style>
+    body {
+      background: #FFF090;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .frame {
+      background: #Cf5;
+      padding: 15px;
+      border: 4px solid white;
+      border-radius: 20px;
+
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    video {
+      width: 100%;
+      display: block;
+      border-radius: 12px;
+    }
+  .h1 {
+    background: #899;
+    padding : 15px;
+    border : 5px solid blue;
+    border-radius : 60px;
+    
+  }
+  </style>
 </head>
+
 <body>
-  <h1 id="welcome">
-    welcome to our site mr.hemu
-    !</h1>
-    
-  
-  <video class="myvideo"controls>
-    <source src="hb1.mp4"
-      type="video/mp4">
-    
-  </video>
-  <video class="myvideo" controls >
-    <source src = "hb2.mp4"type = "video/mp4">
-  </video>
-    <video class = "myvideo" controls >
-    <source src = "hb3.mp4"type = "video/mp4">
+  <h1 class="h1" style="color: gold;">welcome to our site mr.hemu ! , there is something for you</h1>
+
+  <div class="frame">
+
+    <video controls>
+      <source src="hb1.mp4" type="video/mp4">
     </video>
-    <video class="myvideo" controls >
-    <source src = "hb4.mp4"type = "video/mp4">
+
+    <video controls>
+      <source src="hb2.mp4" type="video/mp4">
     </video>
-    <h2> thnk for visiting😘😘😘</h2>
- 
-  
-  
-  
+
+    <video controls>
+      <source src="hb3.mp4" type="video/mp4">
+    </video>
+
+    <video controls>
+      <source src="hb4.mp4" type="video/mp4">
+    </video>
+
+  </div>
+  <h2><i><u>thnk for visiting</u></i>😘😎😘</h2>
+
 </body>
 </html>
+
+
+
