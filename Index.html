@@ -1,0 +1,1188 @@
+<!-- Created by ✨krish --- margo---kimi -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Brother — A Little Storybook</title>
+    
+    <!-- Google Fonts: Elegant Serif + Handdrawn Script -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400..600;1,400&family=Marcellus&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           COLOR PALETTE & CSS VARIABLES
+           ========================================== */
+        :root {
+            --bg-cream: #FAF6EE;
+            --bg-paper-dark: #F3ECE0;
+            --text-main: #3C352E;
+            --text-muted: #73685C;
+            --sage: #8A9A86;
+            --sage-light: #DCE3D9;
+            --dusty-rose: #C88D83;
+            --rose-light: #F2E3E0;
+            --warm-brown: #5C4A3E;
+            --lavender: #A197B0;
+            --gold-accent: #D4AF37;
+            --tape-color: rgba(238, 232, 219, 0.75);
+            
+            --font-serif: 'Lora', 'Marcellus', Georgia, serif;
+            --font-display: 'Cinzel', serif;
+            --font-handwriting: 'Caveat', cursive;
+        }
+
+        /* ==========================================
+           BASE & RESET
+           ========================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            background-color: var(--bg-cream);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            line-height: 1.7;
+            background-color: var(--bg-cream);
+            /* Subtle paper texture overlay */
+            background-image: radial-gradient(#E8DFD1 0.75px, transparent 0.75px), radial-gradient(#E8DFD1 0.75px, var(--bg-cream) 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            position: relative;
+        }
+
+        /* Custom Desktop Cursor */
+        @media (min-width: 992px) {
+            body {
+                cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23C88D83"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+            }
+            a, button, .clickable {
+                cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="%238A9A86"><path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z"/></svg>'), pointer;
+            }
+        }
+
+        /* Typography Helper Classes */
+        .handwriting {
+            font-family: var(--font-handwriting);
+            font-size: 1.6rem;
+            color: var(--warm-brown);
+            line-height: 1.3;
+        }
+
+        .heading-display {
+            font-family: var(--font-display);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--warm-brown);
+        }
+
+        /* Container Layout */
+        .storybook-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+        }
+
+        section {
+            min-height: 90vh;
+            padding: 5rem 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* ==========================================
+           REUSABLE SVG DOODLES & SCRAPBOOK ELEMENTS
+           ========================================== */
+        .doodle-star {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: var(--gold-accent);
+            stroke-width: 2;
+            stroke-linecap: round;
+            animation: pulse-star 3s infinite ease-in-out;
+        }
+
+        .tape-strip {
+            position: absolute;
+            background: var(--tape-color);
+            height: 28px;
+            width: 90px;
+            transform: rotate(-3deg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            z-index: 2;
+            top: -12px;
+            left: 50%;
+            margin-left: -45px;
+            border-left: 2px dashed rgba(0,0,0,0.05);
+            border-right: 2px dashed rgba(0,0,0,0.05);
+        }
+
+        /* Floating background particles */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ==========================================
+           CHARACTER ILLUSTRATIONS (SVG POSES)
+           ========================================== */
+        .character-svg {
+            width: 110px;
+            height: 130px;
+            transition: transform 0.3s ease;
+        }
+
+        .character-container {
+            display: inline-block;
+            position: relative;
+            user-select: none;
+        }
+
+        /* Simple eye blink animation */
+        @keyframes eye-blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+        .char-eye {
+            transform-origin: center;
+            animation: eye-blink 4s infinite;
+        }
+
+        /* Gentle float/sway */
+        @keyframes gentle-sway {
+            0%, 100% { transform: rotate(-2deg) translateY(0); }
+            50% { transform: rotate(2deg) translateY(-4px); }
+        }
+        .animated-character {
+            animation: gentle-sway 4s ease-in-out infinite;
+        }
+
+        /* ==========================================
+           OPENING SCREEN
+           ========================================== */
+        #hero-opening {
+            height: 100vh;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .date-badge {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-family: var(--font-handwriting);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+            transform: rotate(2deg);
+            border-bottom: 1px stroke var(--dusty-rose);
+        }
+
+        .hero-title-sub {
+            font-size: 1.2rem;
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .hero-title-main {
+            font-size: 2.2rem;
+            color: var(--warm-brown);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .arrow-down-doodle {
+            width: 30px;
+            height: 50px;
+            margin-top: 1.5rem;
+            stroke: var(--dusty-rose);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 100;
+            animation: draw-arrow 2s infinite ease-in-out;
+        }
+
+        .character-peeking {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* ==========================================
+           SECTION 1: A LITTLE SOMETHING
+           ========================================== */
+        #section-letter {
+            text-align: center;
+        }
+
+        .letter-paper {
+            background: #FFFDF9;
+            padding: 3rem 2.5rem;
+            border-radius: 4px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            max-width: 650px;
+            position: relative;
+            transform: rotate(-0.5deg);
+        }
+
+        .letter-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            text-align: left;
+            line-height: 1.9;
+        }
+
+        /* ==========================================
+           SECTION 2: THE LITTLE THINGS (SCRAPBOOK CARDS)
+           ========================================== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-top: 3rem;
+        }
+
+        .scrapbook-card {
+            background: #FFFDF9;
+            padding: 1.8rem;
+            border-radius: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+        }
+
+        .scrapbook-card:nth-child(even) {
+            transform: rotate(1.5deg);
+            background: #FDFBF7;
+        }
+
+        .scrapbook-card:nth-child(odd) {
+            transform: rotate(-2deg);
+        }
+
+        .scrapbook-card:hover {
+            transform: rotate(0deg) translateY(-5px) !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            z-index: 3;
+        }
+
+        .card-text {
+            font-family: var(--font-handwriting);
+            font-size: 1.7rem;
+            color: var(--warm-brown);
+            line-height: 1.2;
+        }
+
+        /* ==========================================
+           SECTION 3: MEMORY WALL (PHOTO FRAMES)
+           ========================================== */
+        .photo-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            margin-top: 3rem;
+        }
+
+        .photo-frame {
+            background: #FFFFFF;
+            padding: 12px 12px 45px 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            position: relative;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.03) rotate(1deg);
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 200px;
+            background: var(--bg-paper-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed var(--text-muted);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: var(--font-handwriting);
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+        }
+
+        /* Modal Preview for Photos */
+        .photo-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(60, 53, 46, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            padding: 20px 20px 60px 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-modal.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: var(--dusty-rose);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        /* ==========================================
+           SECTION 4: IF I COULD GIVE YOU SOMETHING
+           ========================================== */
+        #section-wishes {
+            text-align: center;
+        }
+
+        .quiet-atmosphere {
+            margin-bottom: 3rem;
+        }
+
+        .wishes-list {
+            list-style: none;
+            max-width: 600px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .wish-item {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .wish-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .wish-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            stroke: var(--sage);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .wish-text {
+            font-size: 1.15rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           SECTION 5: CHARACTER'S LITTLE JOURNEY
+           ========================================== */
+        .journey-container {
+            width: 100%;
+            position: relative;
+            padding: 3rem 0;
+        }
+
+        .journey-track {
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            width: 90%;
+            height: 2px;
+            border-top: 2px dashed var(--sage);
+            z-index: 1;
+        }
+
+        .journey-nodes {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .journey-node {
+            background: var(--bg-cream);
+            border: 2px solid var(--sage);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            position: relative;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .journey-node.active {
+            background: var(--sage-light);
+            transform: scale(1.15);
+        }
+
+        .journey-label {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-family: var(--font-handwriting);
+            font-size: 1.3rem;
+            color: var(--warm-brown);
+        }
+
+        .journey-walker {
+            position: relative;
+            margin-bottom: 2rem;
+            transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            text-align: center;
+        }
+
+        /* ==========================================
+           SECTION 6: SECRET NOTE (ENVELOPE)
+           ========================================== */
+        .envelope-wrapper {
+            position: relative;
+            width: 280px;
+            height: 180px;
+            background: #EAE1D2;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            cursor: pointer;
+            margin-top: 2rem;
+            perspective: 1000px;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: translateY(-50px) scale(1.02);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 100px solid #DFCFC0;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            z-index: 3;
+        }
+
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .letter-inside {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            width: 250px;
+            background: #FFFDF9;
+            padding: 1.5rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.6s ease;
+            z-index: 2;
+            border: 1px solid var(--rose-light);
+            border-radius: 4px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .envelope-wrapper.open .letter-inside {
+            transform: translateY(-130px);
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 4;
+            width: 320px;
+            left: -20px;
+        }
+
+        /* ==========================================
+           SECTION 7: THE FINAL REVEAL
+           ========================================== */
+        #section-final {
+            min-height: 100vh;
+            width: 100vw;
+            background-color: var(--bg-cream);
+            transition: background-color 1.5s ease, color 1.5s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        #section-final.night-mode {
+            background-color: #23201D;
+            color: #F3ECE0;
+        }
+
+        #section-final.night-mode .heading-display,
+        #section-final.night-mode .handwriting {
+            color: #E8DFD1;
+        }
+
+        .night-sky-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        #section-final.night-mode .night-sky-stars {
+            opacity: 1;
+        }
+
+        .cake-container {
+            margin-top: 2rem;
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+        }
+
+        .candle-glow {
+            width: 19px;
+            height: 19px;
+            background: var(--gold-accent);
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px var(--gold-accent), 0 0 30px #FF8C00;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1.2); opacity: 1; }
+        }
+
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ==========================================
+           ANIMATION UTILITIES (SCROLL OBSERVER)
+           ========================================== */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Reduced Motion Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Responsive Mobile Tweak */
+        @media (max-width: 600px) {
+            .hero-title-main { font-size: 1.7rem; }
+            .letter-paper { padding: 1.8rem 1.2rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .photo-wall { grid-template-columns: 1fr; }
+            .envelope-wrapper.open .letter-inside { width: 280px; left: 0px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas for floating background particles -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Photo Modal -->
+    <div class="photo-modal" id="photoModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="tape-strip"></div>
+            <div class="photo-placeholder" id="modalPhotoContent">
+                <!-- Dynamic Content injected by JS -->
+            </div>
+            <div class="photo-caption" id="modalPhotoCaption">Caption goes here</div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         OPENING SCREEN / HERO
+         ========================================== -->
+    <section id="hero-opening">
+        <!-- EDITABLE: IMPORTANT DATE -->
+        <div class="date-badge">★ August 27, 2026</div>
+
+        <div class="storybook-container">
+            <p class="hero-title-sub reveal-on-scroll">phele bol dete hai sara sbd google ka hai ....Before you turn the page…</p>
+            <h1 class="hero-title-main heading-display reveal-on-scroll">There's something we made for you.</h1>
+            
+            <svg class="arrow-down-doodle" viewBox="0 0 24 48">
+                <path d="M12 2 C12 20 10 32 12 42 M5 35 C9 39 12 44 12 44 C12 44 15 39 19 35" />
+            </svg>
+        </div>
+
+        <!-- CHARACTER POSE 1: Peeking from bottom -->
+        <div class="character-peeking character-container">
+            <svg class="character-svg animated-character" viewBox="0 0 100 120">
+                <!-- Tiny illustrated character body -->
+                <ellipse cx="50" cy="80" rx="25" ry="30" fill="#8A9A86" /> <!-- Sage Sweater -->
+                <circle cx="50" cy="40" r="22" fill="#F2E3E0" /> <!-- Head -->
+                <!-- Hair -->
+                <path d="M30 35 Q50 15 70 35 Q60 25 50 28 Q40 25 30 35 Z" fill="#5C4A3E" />
+                <!-- Eyes -->
+                <circle class="char-eye" cx="42" cy="40" r="2.5" fill="#3C352E" />
+                <circle class="char-eye" cx="58" cy="40" r="2.5" fill="#3C352E" />
+                <!-- Rosy Cheeks -->
+                <circle cx="37" cy="45" r="3" fill="#C88D83" opacity="0.5" />
+                <circle cx="63" cy="45" r="3" fill="#C88D83" opacity="0.5" />
+                <!-- Small Smile -->
+                <path d="M46 48 Q50 52 54 48" fill="none" stroke="#3C352E" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+        </div>
+    </section>
+  <!-- ==========================================
+         SECTION 1: A LITTLE SOMETHING
+         ========================================== -->
+    <section id="section-letter">
+        <div class="storybook-container">
+            <div class="letter-paper reveal-on-scroll">
+                <div class="tape-strip"></div>
+                
+                <!-- CHARACTER POSE 2: Sitting by a flower -->
+                <div style="text-align: right; margin-bottom: -20px;">
+                    <svg class="character-svg" viewBox="0 0 100 100" style="width: 70px; height: 70px;">
+                        <circle cx="40" cy="50" r="16" fill="#F2E3E0" />
+                        <path d="M25 45 Q40 30 55 45" fill="#5C4A3E" />
+                        <circle class="char-eye" cx="35" cy="50" r="2" fill="#3C352E" />
+                        <circle class="char-eye" cx="45" cy="50" r="2" fill="#3C352E" />
+                        <!-- Tiny Flower beside -->
+                        <path d="M75 70 L75 50" stroke="#8A9A86" stroke-width="2" />
+                        <circle cx="75" cy="46" r="6" fill="#C88D83" />
+                        <circle cx="75" cy="46" r="2" fill="#D4AF37" />
+                    </svg>
+                </div>
+
+                <div class="letter-content">
+                    <!-- EDITABLE: PERSONAL LETTER / INTRO -->
+                    <p class="handwriting" style="font-size: 2rem; color: var(--dusty-rose);">Hey Bro,</p>
+                    <p> niche jitna hai vo sb google ka hai toh pura niche tk dhekh ke jana sara instruction follow krna your lovely krish and mayank.......</p>
+                    <p>Consider this a hand-crafted digital scrapbook—a small space dedicated entirely to you, our shared memories, and the fact that you’re stuck with us as your bestie forever.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 2: THE LITTLE THINGS
+         ========================================== -->
+    <section id="section-little-things">
+        <div class="storybook-container">
+            <h2 class="heading-display reveal-on-scroll" style="font-size: 1.5rem; text-align: center;">The Little Things mtbl chhoti chije </h2>
+            <p class="handwriting reveal-on-scroll" style="text-align: center; color: var(--text-muted); margin-top: 0.5rem;">It’s never just one big thing. It’s always the small ones. rona aagya tha pura prompt padh ke </p>
+
+            <div class="cards-grid">
+                <!-- EDITABLE: SCRAPBOOK CARDS / NOTES -->
+                <div class="scrapbook-card reveal-on-scroll">
+                    <div class="tape-strip"></div>
+                    <div class="card-text">"kesa din tha na jbb tum ham dono se mila class ka mar bnn gya pyaar  ."</div>
+                    <svg class="doodle-star" viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9"/></svg>
+                </div>
+
+                <div class="scrapbook-card reveal-on-scroll">
+                    <div class="tape-strip"></div>
+                    <div class="card-text">"the unnecessary arguments over stupid stuff."</div>
+                    <span style="font-size: 1.2rem;">🌱</span>
+                </div>
+
+                <div class="scrapbook-card reveal-on-scroll">
+                    <div class="tape-strip"></div>
+                    <div class="card-text">"the sudden ‘Sbb theek?’ texts when life gets chaotic."</div>
+                    <svg class="doodle-star" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="#C88D83" fill="none"/></svg>
+                </div>
+
+                <div class="scrapbook-card reveal-on-scroll">
+                    <div class="tape-strip"></div>
+                    <div class="card-text">"the inside jokes that no one else in the world would ever understand."</div>
+                    <span style="font-size: 1.2rem;">☁️</span>
+                </div>
+
+                <div class="scrapbook-card reveal-on-scroll" style="grid-column: 1 / -1; text-align: center;">
+                    <div class="tape-strip"></div>
+                    <div class="card-text" style="font-size: 2rem; color: var(--dusty-rose);">"...the moments that probably felt small to you, but somehow stayed with me."</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- ==========================================
+         SECTION 4: IF I COULD GIVE YOU SOMETHING
+         ========================================== -->
+    <section id="section-wishes">
+        <div class="storybook-container">
+            <div class="quiet-atmosphere">
+                <!-- CHARACTER POSE 3: Sitting quietly under moon -->
+                <div class="character-container" style="margin-bottom: 1rem;">
+                    <svg class="character-svg" viewBox="0 0 100 100">
+                        <path d="M70 20 A 15 15 0 1 0 85 35 A 12 12 0 0 1 70 20 Z" fill="#D4AF37" opacity="0.8" /> <!-- Moon -->
+                        <ellipse cx="40" cy="70" rx="18" ry="22" fill="#8A9A86" />
+                        <circle cx="40" cy="40" r="16" fill="#F2E3E0" />
+                        <path d="M25 35 Q40 20 55 35" fill="#5C4A3E" />
+                    </svg>
+                </div>
+                <h2 class="heading-display reveal-on-scroll" style="font-size: 1.3rem;">If we can Give You Something... toh jada se jada  5 ka kurkure dedenge bss hamko return gift me icecream de dena 70 wla mayank se puch lena ........ mjak tha niche padh </h2>
+                <p class="handwriting reveal-on-scroll" style="font-size: 1.8rem; color: var(--dusty-rose);">I wouldn't just give you a single gift. I'd give you a year.</p>
+            </div>
+
+            <!-- EDITABLE: WISHES LIST -->
+            <ul class="wishes-list">
+                <li class="wish-item">
+                    <svg class="wish-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    <div class="wish-text"><strong>A year of lighter days:</strong> Where the things worrying you right now gently resolve themselves.</div>
+                </li>
+                <li class="wish-item">
+                    <svg class="wish-icon" viewBox="0 0 24 24"><path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z"/></svg>
+                    <div class="wish-text"><strong>A year of quiet confidence:</strong> Knowing you're doing much better in life than you give yourself credit for.</div>
+                </li>
+                <li class="wish-item">
+                    <svg class="wish-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <div class="wish-text"><strong>A year of genuine joy:</strong> Good food, solid sleep, unexpected laughs, and zero unnecessary drama.</div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 5: CHARACTER'S LITTLE JOURNEY
+         ========================================== -->
+    <section id="section-journey">
+        <div class="storybook-container" style="width: 100%;">
+            <h2 class="heading-display reveal-on-scroll" style="font-size: 1.4rem; text-align: center; margin-bottom: 2rem;">The Ongoing Journey</h2>
+            
+             
+            
+
+            <!-- CHARACTER POSE 4: Walking character moving across nodes -->
+            <div class="journey-walker" id="journeyWalker" style="left: 0%;">
+                <svg class="character-svg" viewBox="0 0 100 100" style="width: 60px; height: 60px;">
+                    <ellipse cx="50" cy="65" rx="16" ry="20" fill="#8A9A86" />
+                    <circle cx="50" cy="35" r="15" fill="#F2E3E0" />
+                    <path d="M35 30 Q50 15 65 30" fill="#5C4A3E" />
+                    <circle class="char-eye" cx="45" cy="35" r="2" fill="#3C352E" />
+                    <circle class="char-eye" cx="55" cy="35" r="2" fill="#3C352E" />
+                </svg>
+            </div>
+
+            <div class="journey-container">
+                <div class="journey-track"></div>
+                <div class="journey-nodes">
+                    <div class="journey-node active" onclick="moveJourney(0, '0%')">
+                        🌱
+                        <div class="journey-label">Beginning</div>
+                    </div>
+                    <div class="journey-node" onclick="moveJourney(1, '25%')">
+                        ☁️
+                        <div class="journey-label">Dreams</div>
+                    </div>
+                    <div class="journey-node" onclick="moveJourney(2, '50%')">
+                        🌙
+                        <div class="journey-label">Storms</div>
+                    </div>
+                    <div class="journey-node" onclick="moveJourney(3, '75%')">
+                        🌷
+                        <div class="journey-label">Growth</div>
+                    </div>
+                    <div class="journey-node" onclick="moveJourney(4, '95%')">
+                        ⭐
+                        <div class="journey-label">Future</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- ==========================================
+         SECTION 6: SECRET NOTE
+         ========================================== -->
+    <section id="section-envelope">
+        <div class="storybook-container">
+            <h2 class="heading-display reveal-on-scroll" style="font-size: 1.3rem; text-align: center;">There's one more thing...</h2>
+            <p class="handwriting reveal-on-scroll" style="text-align: center; color: var(--text-muted);">[ Tap the envelope to open ]</p>
+
+            <div class="envelope-wrapper reveal-on-scroll" id="envelope" onclick="toggleEnvelope()">
+                <div class="envelope-flap"></div>
+                <div class="letter-inside">
+                    <!-- EDITABLE: SECRET PERSONAL NOTE -->
+                    <p class="handwriting" style="color: var(--dusty-rose); font-size: 1.5rem; margin-bottom: 0.5rem;">P.S.</p>
+                    <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main);">
+                        No matter how busy life gets or how far apart we are, remember you’ve always got someone in your corner. we are endlessly proud of the person you’re becoming.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 7: THE FINAL REVEAL
+         ========================================== -->
+    <section id="section-final">
+        <!-- SVG Stars background for dark mode -->
+        <svg class="night-sky-stars" viewBox="0 0 1000 1000">
+            <circle cx="150" cy="200" r="1.5" fill="#FFFDF9" opacity="0.8"/>
+            <circle cx="800" cy="150" r="2" fill="#FFFDF9" opacity="0.9"/>
+            <circle cx="350" cy="400" r="1" fill="#FFFDF9" opacity="0.6"/>
+            <circle cx="700" cy="600" r="1.8" fill="#FFFDF9" opacity="0.8"/>
+            <circle cx="200" cy="750" r="1.2" fill="#FFFDF9" opacity="0.7"/>
+            <circle cx="850" cy="800" r="2.5" fill="#D4AF37" opacity="0.9"/>
+        </svg>
+
+        <div class="storybook-container">
+            <p class="handwriting reveal-on-scroll" style="font-size: 2rem; color: var(--text-muted);">Before you leave…</p>
+            
+            <!-- EDITABLE: MAIN BIRTHDAY HEADING & NAME -->
+            <h1 class="heading-display reveal-on-scroll" style="font-size: 2.8rem; margin: 1rem 0; color: var(--warm-brown);">
+                Happy Birthday, hemu .
+            </h1>
+
+            <p class="reveal-on-scroll" style="max-width: 500px; margin: 0 auto 2rem auto; font-style: italic; color: var(--text-muted);">
+                Another year of you.<br>
+                Another year of memories.<br>
+                Another year of being someone's favorite .
+            </p>
+
+            <!-- CHARACTER POSE 5: Celebrating with Candle -->
+            <div class="cake-container reveal-on-scroll" onclick="makeWish()">
+                <div class="candle-glow" id="candleFlame"></div>
+                <svg class="character-svg" viewBox="0 0 120 120" style="width: 130px; height: 130px;">
+                    <!-- Character Body -->
+                    <ellipse cx="60" cy="80" rx="20" ry="25" fill="#8A9A86" />
+                    <circle cx="60" cy="45" r="18" fill="#F2E3E0" />
+                    <path d="M42 40 Q60 22 78 40" fill="#5C4A3E" />
+                    <circle class="char-eye" cx="53" cy="45" r="2" fill="#3C352E" />
+                    <circle class="char-eye" cx="67" cy="45" r="2" fill="#3C352E" />
+                    <!-- Tiny Cake -->
+                    <rect x="45" y="85" width="30" height="18" rx="2" fill="#F2E3E0" stroke="#C88D83" stroke-width="1.5" />
+                    <rect x="58" y="73" width="4" height="12" fill="#D4AF37" /> <!-- Candle -->
+                </svg>
+                <p class="handwriting" style="font-size: 1.2rem; margin-top: 0.5rem; color: var(--dusty-rose);">[ Tap candle to blow out ]</p>
+            </div>
+
+            <!-- FINAL SIGNATURE -->
+            <div style="margin-top: 4rem;" class="reveal-on-scroll">
+                <p class="handwriting" style="font-size: 1.8rem; color: var(--warm-brown);">
+                    — your shameless friends lovely krish and mayank...🌷
+                </p>
+                <nav>
+              <button><a href="p-1.html">click here for more</a></button>
+                </nav>
+            </div>
+        </div>
+    </section>
+  <!-- Celebration Confetti Overlay Canvas -->
+    <canvas class="celebration-overlay" id="confettiCanvas"></canvas>
+
+    <!-- ==========================================
+         JAVASCRIPT LOGIC
+         ========================================== -->
+    <script>
+        /* 1. SCROLL OBSERVER FOR REVEAL ANIMATIONS */
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    
+                    // Trigger section 4 wish list sequence
+                    if (entry.target.id === 'section-wishes') {
+                        animateWishes();
+                    }
+                    
+                    // Trigger final section dark mode transition
+                    if (entry.target.id === 'section-final') {
+                        document.getElementById('section-final').classList.add('night-mode');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll, section').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        /* 2. SECTION 4 WISHES ANIMATION */
+        function animateWishes() {
+            const wishes = document.querySelectorAll('.wish-item');
+            wishes.forEach((wish, index) => {
+                setTimeout(() => {
+                    wish.classList.add('visible');
+                }, index * 400);
+            });
+        }
+
+        /* 3. SECTION 5 JOURNEY INTERACTION */
+        function moveJourney(index, leftPos) {
+            const walker = document.getElementById('journeyWalker');
+            const nodes = document.querySelectorAll('.journey-node');
+            
+            walker.style.left = leftPos;
+            nodes.forEach((node, idx) => {
+                if (idx === index) {
+                    node.classList.add('active');
+                } else {
+                    node.classList.remove('active');
+                }
+            });
+        }
+
+        /* 4. SECTION 6 ENVELOPE TOGGLE */
+        function toggleEnvelope() {
+            const env = document.getElementById('envelope');
+            env.classList.toggle('open');
+        }
+
+        /* 5. MEMORY WALL MODAL INTERACTION */
+        function openModal(title, caption) {
+            const modal = document.getElementById('photoModal');
+            const modalContent = document.getElementById('modalPhotoContent');
+            const modalCaption = document.getElementById('modalPhotoCaption');
+
+            modalContent.innerHTML = `
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <p style="margin-top:10px;">${title}</p>
+            `;
+            modalCaption.innerText = caption;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('photoModal').classList.remove('active');
+        }
+
+        /* 6. BACKGROUND CANVAS PARTICLES (DUST & STARS) */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(138, 154, 134, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 40; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        /* 7. CANDLE BLOW & CELEBRATION CONFETTI */
+        function makeWish() {
+            const flame = document.getElementById('candleFlame');
+            flame.style.display = 'none'; // Blow candle
+            
+            triggerConfetti();
+        }
+
+        function triggerConfetti() {
+            const cCanvas = document.getElementById('confettiCanvas');
+            const cCtx = cCanvas.getContext('2d');
+            cCanvas.width = window.innerWidth;
+            cCanvas.height = window.innerHeight;
+
+            let confetti = [];
+            const colors = ['#C88D83', '#8A9A86', '#D4AF37', '#F2E3E0', '#A197B0'];
+
+            for (let i = 0; i < 80; i++) {
+                confetti.push({
+                    x: cCanvas.width / 2,
+                    y: cCanvas.height / 2 + 100,
+                    rx: Math.random() * 6 + 3,
+                    ry: Math.random() * 12 + 6,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: (Math.random() - 0.8) * 12,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rotation: Math.random() * 360,
+                    vRot: Math.random() * 10 - 5
+                });
+            }
+
+function renderConfetti() {
+                cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+                confetti.forEach((p, index) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.15; // Gravity
+                    p.rotation += p.vRot;
+
+                    cCtx.save();
+                    cCtx.translate(p.x, p.y);
+                    cCtx.rotate((p.rotation * Math.PI) / 180);
+                    cCtx.fillStyle = p.color;
+                    cCtx.fillRect(-p.rx / 2, -p.ry / 2, p.rx, p.ry);
+                    cCtx.restore();
+
+                    if (p.y > cCanvas.height) confetti.splice(index, 1);
+                });
+
+                if (confetti.length > 0) {
+                    requestAnimationFrame(renderConfetti);
+                }
+            }
+            renderConfetti();
+        }
+    </script>
+</body>
+</html>
+          
+
+
+
+
+
+
+
+
+
+
+
